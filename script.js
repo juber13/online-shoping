@@ -6,7 +6,7 @@ const rangeInput = document.querySelector('.range-input');
 
 const items = [];
 const fetchProducts = async() => {
-    container.innerHTML = `<div class="loading"></div>`;
+    container.innerHTML = `<div class="loading" margin-right:"5rem"></div>`;
     try{ 
         const res =  await fetch(productsApi);
         const data =  await res.json();
@@ -31,17 +31,17 @@ function capitalString(word){
 }
 
 function renderHTML(data){
-  const products = data.map((product) => {
+    const products = data.map((product) => {
     const {id , name:title , price } = product.fields;
+    const colors = product.fields.colors.map(color => `<div class="color-box" style="background-color:${color}"></div>`).join('');
     const {url : img} = product.fields.image[0];
     const formatPrice = price / 100;
     return `<div class="product">
-            <div class="product-image">
-            <img src=${img} alt="">
-          </div>
+            <div class="product-image"><img src=${img} alt=""></div>
             <div class="product-detail">
-            <h5 class="product-name">${capitalString(title)}</h5>
-            <p class="price">$${formatPrice}</p>
+            <div class="color-container"><span class="color-text">Available Colors </span>${colors}</div>
+            <div class="product-title"><h5 class="product-name">${capitalString(title)}</h5></div>
+             <div><p class="price">$${formatPrice}</p></div>
             </div>
         </div>`
   }).join("");
@@ -56,13 +56,13 @@ function filterData(e){
   if(e.target.value) {
       if(filterItems.length > 0)
       renderHTML(filterItems);
-      else container.innerHTML = '<h3>No Product found !!!</h3>';
+      else container.innerHTML = '<div><span style="font-size:100px";>&#128524;</span><h3>No Product found !!!</h3></div>';
   }
   else renderHTML(items);
-//   console.log(items)
 }
 
 function renderSideBar(){
+    console.log("i am working")
     console.log(items)
     const category = [...new Set(items.map(item => item.company))];
     console.log(category)
