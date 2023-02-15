@@ -50,10 +50,10 @@ function renderHTML(data){
 
 
 function filterData(e){
-    console.log(e.target.value);
+    if(e.type == "key") rangeInput.value = 0; 
     if(e.type == "change") document.querySelector('.range-value').innerHTML = `$${e.target.value}`;    
      const filterItems = items.filter(item => item.fields.name.toLowerCase().indexOf(e.target.value) !== -1 || 
-                                      item.fields.price <=  e.target.value * 100);
+                                      item.fields.price >  parseInt(e.target.value) * 100);
     if(e.target.value) {
       if(filterItems.length > 0) renderHTML(filterItems); 
       else container.innerHTML = '<div><span style="font-size:100px";>&#128524;</span><h3>No Product found !!!</h3></div>';
@@ -73,7 +73,7 @@ function renderCarousel(data){
     slider.innerHTML = displayImage;
     index++;
     if(index >= displayImages.length) index = 0;
-    },2000)
+    },3000)
 }
 
 const categoriesList = document.querySelector('.side-bar-items');
