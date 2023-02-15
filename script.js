@@ -1,5 +1,5 @@
 const container = document.querySelector('.product-container');
-const slider = document.querySelector('.slider');
+const slider = document.querySelector('.frame');
 // https://course-api.com/javascript-store-products/
 const productsApi = "https://course-api.com/javascript-store-products";
 const searchInput = document.querySelector('.search-input');
@@ -55,8 +55,7 @@ function filterData(e){
      const filterItems = items.filter(item => item.fields.name.toLowerCase().indexOf(e.target.value) !== -1 || 
                                       item.fields.price <=  e.target.value * 100);
     if(e.target.value) {
-      if(filterItems.length > 0)
-      renderHTML(filterItems); 
+      if(filterItems.length > 0) renderHTML(filterItems); 
       else container.innerHTML = '<div><span style="font-size:100px";>&#128524;</span><h3>No Product found !!!</h3></div>';
     }
 
@@ -64,35 +63,17 @@ function filterData(e){
 }
 
 
+var index = 0;
 function renderCarousel(data){
     const newDatas = data.slice(0,4);
-    const displayImages = newDatas.map(data => {
-        return `<img src=${data.fields.image[0].url} alt=${data.fields.name}>`;
-    }).join("");
-    slider.innerHTML = displayImages;
-    renderIndicator(newDatas)
-}
-
-function renderIndicator(data){
-  const displayIndicator = data.map((item , index) => `<div id="indi"  data-index=${index + 1} class="ball" onclick="slideImage(${index})"></div>`).join("");
-  document.querySelector('.indicator').innerHTML = displayIndicator;
-}
-
-let sliderIndex = 1;
-// const buttons = document.querySelectorAll('.ball');
-// buttons[0].style.backgroundColor = "#000";
-
-const addClass = () => {
-  buttons.forEach((button) => {
-    button.style.backgroundColor = "transparent";
-  })
-}
-
-
-function slideImage(index){
-    slider.style.transform = `translateX(-${index * 800}px)`;
-    addClass();
-    sliderIndex = index + 1;
+    const displayImages = newDatas.map(data => data.fields.image[0].url);
+    console.log(displayImages);
+    setInterval(() => {
+    const displayImage = `<img src=${displayImages[index]} alt="images"}>`;
+    slider.innerHTML = displayImage;
+    index++;
+    if(index >= displayImages.length) index = 0;
+    },2000)
 }
 
 const categoriesList = document.querySelector('.side-bar-items');

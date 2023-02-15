@@ -84,54 +84,26 @@ header{
 }
 
 .frame{
-    width: 82%;
+    width: 83%;
     height: 300px;
-    overflow: hidden;
 }
 
-.slider{
-    width: 100% !important;
-    display: flex;
-    transition:all 0.4s ease;
-    /* flex: 3; */
-}
-
-.slider img{
+.frame img{
     width: 100%;
     height: 300px;
     object-fit: cover;
-    aspect-ratio:5;
-    filter: blur(2%);
-}
-
-.indicator{
-    width: 82%;
-    margin: 5px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap:5px;
-}
-
-.ball{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 1px solid #000;
-    cursor: pointer;
 }
 
 
 .side-bar{
     flex: 0.45;
     background-color: antiquewhite;
-    /* position: fixed; */
+    position: sticky;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
     height: 100vh;
-    position: sticky;
 }
 
 ul{
