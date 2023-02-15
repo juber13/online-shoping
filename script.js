@@ -1,4 +1,5 @@
 const container = document.querySelector('.product-container');
+const slider = document.querySelector('.slider');
 // https://course-api.com/javascript-store-products/
 const productsApi = "https://course-api.com/javascript-store-products";
 const searchInput = document.querySelector('.search-input');
@@ -13,9 +14,10 @@ const fetchProducts = async() => {
         items.push(...data);
         renderHTML(data)
     }catch(error){
-
         container.innerHTML = `<p>Somthing went wrong</p>`;
     }
+    renderSidebar(items)
+    renderCarousel(items);    
 }
 
 fetchProducts();
@@ -25,9 +27,7 @@ function capitalString(word){
     for (let i = 0; i < words.length; i++) {
         words[i] = words[i][0].toUpperCase() + words[i].substr(1);
     }
-    
-    words.join(" ");
-    return words;
+    return words.join(" ");
 }
 
 function renderHTML(data){
@@ -49,27 +49,65 @@ function renderHTML(data){
 }
 
 
-
 function filterData(e){
+    console.log(e.target.value);
     if(e.type == "change") document.querySelector('.range-value').innerHTML = `$${e.target.value}`;    
-  const filterItems = items.filter(item => item.fields.name.toLowerCase().indexOf(e.target.value) !== -1 || item.fields.price <=  e.target.value * 100);
-  if(e.target.value) {
+     const filterItems = items.filter(item => item.fields.name.toLowerCase().indexOf(e.target.value) !== -1 || 
+                                      item.fields.price <=  e.target.value * 100);
+    if(e.target.value) {
       if(filterItems.length > 0)
-      renderHTML(filterItems);
+      renderHTML(filterItems); 
       else container.innerHTML = '<div><span style="font-size:100px";>&#128524;</span><h3>No Product found !!!</h3></div>';
-  }
-  else renderHTML(items);
+    }
+
+    else renderHTML(items);
 }
 
-function renderSideBar(){
-    console.log("i am working")
-    console.log(items)
-    const category = [...new Set(items.map(item => item.company))];
-    console.log(category)
 
+function renderCarousel(data){
+    const newDatas = data.slice(0,4);
+    const displayImages = newDatas.map(data => {
+        return `<img src=${data.fields.image[0].url} alt=${data.fields.name}>`;
+    }).join("");
+    slider.innerHTML = displayImages;
+    renderIndicator(newDatas)
 }
 
-renderSideBar();
+function renderIndicator(data){
+  const displayIndicator = data.map((item , index) => `<div id="indi"  data-index=${index + 1} class="ball" onclick="slideImage(${index})"></div>`).join("");
+  document.querySelector('.indicator').innerHTML = displayIndicator;
+}
+
+let sliderIndex = 1;
+// const buttons = document.querySelectorAll('.ball');
+// buttons[0].style.backgroundColor = "#000";
+
+const addClass = () => {
+  buttons.forEach((button) => {
+    button.style.backgroundColor = "transparent";
+  })
+}
+
+
+function slideImage(index){
+    slider.style.transform = `translateX(-${index * 800}px)`;
+    addClass();
+    sliderIndex = index + 1;
+}
+
+const categoriesList = document.querySelector('.side-bar-items');
+function renderSidebar(data){
+  const allCategory = data.map(item => item.fields.company);
+  const category = ["All", ...allCategory.filter((item , index) => allCategory.indexOf(item) === index)];
+  categoriesList.innerHTML = category.map(cat => `<li style="cursor:pointer" value=${cat}>${cat}</li>`).join("");
+
+  categoriesList.addEventListener("click" , (e) => {
+    const selectedCategories = e.target.innerText;
+    selectedCategories === "All" ? renderHTML(items) : renderHTML(data.filter(item => item.fields.company.toLowerCase().indexOf(selectedCategories) !== -1));
+  })
+}
+
+
 
 
 
